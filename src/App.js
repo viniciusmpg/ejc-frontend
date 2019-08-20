@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './components/Header';
-import PersonTable from './components/Tables/Person';
+import PersonTable from './components/PersonList';
 
 export default () => {
   return (
