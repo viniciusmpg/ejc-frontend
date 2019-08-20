@@ -1,11 +1,12 @@
 import React from 'react';
-import axios from 'axios';
 import { Table } from 'react-bootstrap';
+
+const client = require('../../api/apiClient');
 
 export default () => {
     const [getPersons, setPersons] = React.useState([]);
 
-    axios.get('http://localhost:9090/persons').then(res => {
+    client.get('persons').then(res => {
         const persons = res.data;
         setPersons(persons);
     }).catch(err => {
