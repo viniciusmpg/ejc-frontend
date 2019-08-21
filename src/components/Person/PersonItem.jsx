@@ -1,11 +1,29 @@
 import React from 'react';
 import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Fab from '@material-ui/core/Fab';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { makeStyles } from '@material-ui/core/styles';
+
+
+const useStyles = makeStyles(theme => ({
+    fab: {
+        margin: theme.spacing(1),
+    },
+    extendedIcon: {
+        marginRight: theme.spacing(1),
+    },
+}));
 
 export default (props) => {
+    const classes = useStyles();
+
     return (
         <React.Fragment>
             <ListItem alignItems="flex-start">
@@ -21,13 +39,23 @@ export default (props) => {
                                 variant="body2"
                                 color="textPrimary"
                             >
-                                Ali Connors
+                                {`Participações em EJC: ${props.person.eventParticipations.length || 0}`}
                             </Typography>
-                            {" — I'll be in your neighborhood doing errands this slkfja dflasdjf asdlfjk aslfkasjf lsakjf laksj…"}
+                            {"  "}
+
                         </React.Fragment>
                     }
                 />
+                <ListItemSecondaryAction>
+                    <Fab size="small" aria-label="edit" className={classes.fab}>
+                        <EditIcon />
+                    </Fab>
+                    <Fab size="small" color="secondary" aria-label="delete"  className={classes.fab}>
+                        <DeleteIcon />
+                    </Fab>
+                </ListItemSecondaryAction>
             </ListItem>
+            <Divider variant="inset" component="li" />
         </React.Fragment>
     );
 }
