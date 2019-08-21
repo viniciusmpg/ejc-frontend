@@ -158,6 +158,9 @@ export default function PrimarySearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
+          <Fab color="primary" aria-label="add" className={classes.fabButton}>
+            <AddIcon />
+          </Fab>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
