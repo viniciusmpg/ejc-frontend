@@ -1,12 +1,12 @@
 import React from 'react';
 import Header from './components/Header';
-import PersonTable from './components/PersonList';
+import PersonList from './components/Person//PersonList';
 
 export default () => {
   return (
     <React.Fragment>
       <Header />
-      <PersonTable />
+      <PersonList></PersonList>
     </React.Fragment>
   )
 }
