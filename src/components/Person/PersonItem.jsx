@@ -6,11 +6,10 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { makeStyles } from '@material-ui/core/styles';
-
+import DeleteButton from '../common/DeleteButton';
 
 const useStyles = makeStyles(theme => ({
     fab: {
@@ -50,9 +49,7 @@ export default (props) => {
                     <Fab size="small" aria-label="edit" className={classes.fab}>
                         <EditIcon />
                     </Fab>
-                    <Fab size="small" color="secondary" aria-label="delete"  className={classes.fab}>
-                        <DeleteIcon />
-                    </Fab>
+                    <DeleteButton className={classes.fab} name={props.person.name} personId={props.person._id} />
                 </ListItemSecondaryAction>
             </ListItem>
             <Divider variant="inset" component="li" />

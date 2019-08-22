@@ -10,6 +10,9 @@ import Menu from '@material-ui/core/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import * as actionCreators from '../actions/actions';
+import { connect } from 'react-redux';
+
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -73,7 +76,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+const mapStateToProps = (state) => { return state; };
+
+
+
+function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -96,6 +103,12 @@ export default function PrimarySearchAppBar() {
 
   function handleMobileMenuOpen(event) {
     setMobileMoreAnchorEl(event.currentTarget);
+  }
+
+  function handleKeyUp(event) {
+    if (event.key === 'Enter') {
+      props.loadPersonList(event.target.value);
+    }
   }
 
   const menuId = 'primary-search-account-menu';
@@ -151,6 +164,7 @@ export default function PrimarySearchAppBar() {
             </div>
             <InputBase
               placeholder="Pesquisar…"
+              onKeyUp={handleKeyUp}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -189,3 +203,5 @@ export default function PrimarySearchAppBar() {
     </div>
   );
 }
+
+export default connect(mapStateToProps, actionCreators)(PrimarySearchAppBar);
