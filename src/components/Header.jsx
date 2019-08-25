@@ -12,6 +12,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import * as actionCreators from '../actions/actions';
 import { connect } from 'react-redux';
+import CreateButton from './common/CreateButton';
 
 
 const useStyles = makeStyles(theme => ({
@@ -153,7 +154,7 @@ function PrimarySearchAppBar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="static" color="primary">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
             EJC
@@ -172,6 +173,7 @@ function PrimarySearchAppBar(props) {
               inputProps={{ 'aria-label': 'search' }}
             />
           </div>
+          <CreateButton />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton

@@ -8,6 +8,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
 import * as actionCreators from '../../actions/actions';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { connect } from 'react-redux';
 
 const client = require('../../api/apiClient');
@@ -16,6 +18,8 @@ const mapStateToProps = (state) => { return state; };
 
 function DeleteButton(props) {
     const [open, setOpen] = React.useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
     function handleClickOpen() {
         setOpen(true);
@@ -42,6 +46,7 @@ function DeleteButton(props) {
             </Fab>
             <Dialog
                 open={open}
+                fullScreen={fullScreen}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
