@@ -21,3 +21,8 @@ React application to manage volunteering events, by maintaining people and teams
 $ npm install
 $ npm start
 ```
+
+#### Next steps
+
+- Authentication using JWT
+- Automated tests
