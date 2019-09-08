@@ -1,19 +1,22 @@
 const client = require('../api/apiClient');
 
 export function loadPersonList(name) {
-    return (dispatch) => {
-        return (
-            client.get(`persons${name ? `?name=${name}` : ''}`)
-                .then(res => {
-                    dispatch(updatePersonList(res.data));
-                })
-        );
-    }
+  return dispatch => {
+    return client
+      .get(`persons${name ? `?name=${name}` : ''}`)
+      .then(res => {
+        dispatch(updatePersonListAction(res.data));
+      })
+      .catch(error => {
+          // TODO: error status
+        console.error('erro logado', error);
+      });
+  };
 }
 
-export function updatePersonList(persons) {
-    return {
-        type: "UPDATE-PERSON-LIST",
-        persons: persons
-    }
+function updatePersonListAction(persons) {
+  return {
+    type: 'UPDATE-PERSON-LIST',
+    persons: persons
+  };
 }

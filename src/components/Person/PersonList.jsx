@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 
 class PersonList extends React.Component {
 
-  componentDidMount() {
-    this.props.loadPersonList();
+  async componentDidMount() {
+    await this.props.loadPersonList();
   }
 
   render() {

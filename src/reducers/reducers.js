@@ -6,7 +6,8 @@ const reducers = (state = defaultState, action) => {
             ...state,
             persons: action.persons
         }
-    } else {
+    }
+     else {
         return { ...state };
     }
 };
