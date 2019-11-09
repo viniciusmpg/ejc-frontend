@@ -8,8 +8,10 @@ export default () => {
   return (
     <Router>
       <Header />
-      <Route path='/' component={PersonList} />
-      <Route path='/adicionar' component={CreatePerson} />
+      <Switch>
+        <Route exact path='/' component={PersonList} />
+        <Route exact path='/adicionar' component={CreatePerson} />
+      </Switch>
     </Router>
   );
 };

@@ -13,6 +13,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import * as actionCreators from '../actions/actions';
 import { connect } from 'react-redux';
 import CreateButton from './common/CreateButton';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme => ({
@@ -157,7 +158,7 @@ function PrimarySearchAppBar(props) {
       <AppBar position="static" color="primary">
         <Toolbar>
           <Typography className={classes.title} variant="h6" noWrap>
-            EJC
+            <Link to="/">EJC</Link>
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
