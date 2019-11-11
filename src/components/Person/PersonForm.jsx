@@ -7,6 +7,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';
+import PersonPicture from './PersonPicture';
 
 const client = require('../../api/apiClient');
 
@@ -23,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 export default props => {
   const classes = useStyles();
   const [getForm, setForm] = React.useState({});
-
 
   function changeHandler(event) {
     const { name, value } = event.target;
@@ -51,6 +51,7 @@ export default props => {
 
     <React.Fragment>
       <form onSubmit={handleSubmit}>
+        <PersonPicture facebookId={getForm.facebookId}></PersonPicture>
         <TextField
           autoFocus
           margin='dense'
@@ -82,6 +83,18 @@ export default props => {
           label='Endereço de e-mail'
           type='email'
           value={getForm.email}
+          fullWidth
+          InputLabelProps={{
+            shrink: true
+          }}
+          onChange={changeHandler}
+        />
+        <TextField
+          margin='dense'
+          name='facebookId'
+          label='Facebook'
+          type='text'
+          value={getForm.facebookId}
           fullWidth
           InputLabelProps={{
             shrink: true
