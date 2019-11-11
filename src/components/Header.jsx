@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,7 +13,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import * as actionCreators from '../actions/actions';
 import { connect } from 'react-redux';
 import CreateButton from './common/CreateButton';
-import { Link } from 'react-router-dom';
+import { Link, withRouter} from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme => ({
@@ -86,9 +86,16 @@ function PrimarySearchAppBar(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [headerHidden, setHeaderHidden] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  let currentPage;
+
+  useEffect(() => {
+    setHeaderHidden(window.location.pathname === '/login');
+  });
 
   function handleProfileMenuOpen(event) {
     setAnchorEl(event.currentTarget);
@@ -96,6 +103,11 @@ function PrimarySearchAppBar(props) {
 
   function handleMobileMenuClose() {
     setMobileMoreAnchorEl(null);
+  }
+
+  function signOut(){
+    sessionStorage.removeItem("userData");
+    props.history.push("/login");
   }
 
   function handleMenuClose() {
@@ -124,7 +136,7 @@ function PrimarySearchAppBar(props) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Sair</MenuItem>
+      <MenuItem onClick={signOut}>Sair</MenuItem>
     </Menu>
   );
 
@@ -154,57 +166,58 @@ function PrimarySearchAppBar(props) {
   );
 
   return (
-    <div className={classes.grow}>
-      <AppBar position="static" color="primary">
-        <Toolbar>
-          <Typography className={classes.title} variant="h6" noWrap>
-            <Link to="/">EJC</Link>
-          </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+    headerHidden ? null :
+      <div className={classes.grow}>
+        <AppBar position="static" color="primary">
+          <Toolbar>
+            <Typography className={classes.title} variant="h6" noWrap>
+              <Link to="/">EJC</Link>
+            </Typography>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Pesquisar…"
+                onKeyUp={handleKeyUp}
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+              />
             </div>
-            <InputBase
-              placeholder="Pesquisar…"
-              onKeyUp={handleKeyUp}
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-          <CreateButton />
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </div>
+            <CreateButton />
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+        {renderMobileMenu}
+        {renderMenu}
+      </div>
   );
 }
 
-export default connect(mapStateToProps, actionCreators)(PrimarySearchAppBar);
+export default  withRouter(connect(mapStateToProps, actionCreators)(PrimarySearchAppBar));

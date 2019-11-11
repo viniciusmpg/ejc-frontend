@@ -43,7 +43,7 @@ export default props => {
     client.post('persons', getForm).then(res => {
       openSuccessBar();
     }).catch(res => {
-      console.log('error response', res)
+      console.log('error response', res);
     });
   }
 

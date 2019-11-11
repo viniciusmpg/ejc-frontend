@@ -1,8 +1,8 @@
-var axios = require('axios');
+const axios = require('axios');
 
 const endpoint = process.env.NODE_ENV == 'development' ? 'http://localhost:9090' : 'https://ejc-node.herokuapp.com';
 
-var axiosInstance = axios.create({
+const axiosInstance = axios.create({
     baseURL: endpoint
 });
 
