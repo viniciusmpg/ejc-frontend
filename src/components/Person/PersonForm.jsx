@@ -1,27 +1,27 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import { Link } from 'react-router-dom';
-import PersonPicture from './PersonPicture';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { green } from "@material-ui/core/colors";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import { Link } from "react-router-dom";
+import PersonPicture from "./PersonPicture";
 
-const client = require('../../api/apiClient');
+const client = require("../../api/apiClient");
 
 const useStyles = makeStyles(theme => ({
   close: {
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0.5)
   },
   success: {
     background: green[600],
-    color: '#FFF'
+    color: "#FFF"
   }
 }));
 
-export default props => {
+export default () => {
   const classes = useStyles();
   const [getForm, setForm] = React.useState({});
 
@@ -40,24 +40,26 @@ export default props => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    client.post('persons', getForm).then(res => {
-      openSuccessBar();
-    }).catch(res => {
-      console.log('error response', res);
-    });
+    client
+      .post("persons", getForm)
+      .then(res => {
+        openSuccessBar();
+      })
+      .catch(res => {
+        console.log("error response", res);
+      });
   }
 
   return (
-
     <React.Fragment>
       <form onSubmit={handleSubmit}>
         <PersonPicture facebookId={getForm.facebookId}></PersonPicture>
         <TextField
           autoFocus
-          margin='dense'
-          name='name'
-          label='Nome'
-          type='text'
+          margin="dense"
+          name="name"
+          label="Nome"
+          type="text"
           fullWidth
           InputLabelProps={{
             shrink: true
@@ -66,10 +68,10 @@ export default props => {
           value={getForm.name}
         />
         <TextField
-          margin='dense'
-          name='dob'
-          label='Data de Nascimento'
-          type='date'
+          margin="dense"
+          name="dob"
+          label="Data de Nascimento"
+          type="date"
           fullWidth
           InputLabelProps={{
             shrink: true
@@ -78,10 +80,10 @@ export default props => {
           value={getForm.dob}
         />
         <TextField
-          margin='dense'
-          name='email'
-          label='Endereço de e-mail'
-          type='email'
+          margin="dense"
+          name="email"
+          label="Endereço de e-mail"
+          type="email"
           value={getForm.email}
           fullWidth
           InputLabelProps={{
@@ -90,10 +92,10 @@ export default props => {
           onChange={changeHandler}
         />
         <TextField
-          margin='dense'
-          name='facebookId'
-          label='Facebook'
-          type='text'
+          margin="dense"
+          name="facebookId"
+          label="Facebook"
+          type="text"
           value={getForm.facebookId}
           fullWidth
           InputLabelProps={{
@@ -101,28 +103,37 @@ export default props => {
           }}
           onChange={changeHandler}
         />
-        <Button type='submit'>Salvar</Button>
+        <Button type="submit">Salvar</Button>
       </form>
 
       <Snackbar
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
+          vertical: "bottom",
+          horizontal: "left"
         }}
         open={getForm.openDialog}
         autoHideDuration={6000}
         onClose={closeSuccessBar}
         ContentProps={{
-          'aria-describedby': 'message-id',
+          "aria-describedby": "message-id",
           classes: {
             root: classes.success
           }
         }}
-        message={<span id="message-id">{getForm.name} adicionado com sucesso!</span>}
+        message={
+          <span id="message-id">{getForm.name} adicionado com sucesso!</span>
+        }
         action={[
-          <Button component={Link} to="/" key="undo" color="primary" size="small" onClick={closeSuccessBar}>
+          <Button
+            component={Link}
+            to="/"
+            key="undo"
+            color="primary"
+            size="small"
+            onClick={closeSuccessBar}
+          >
             Voltar para lista
-             </Button>,
+          </Button>,
           <IconButton
             key="close"
             aria-label="close"
@@ -131,7 +142,7 @@ export default props => {
             onClick={closeSuccessBar}
           >
             <CloseIcon />
-          </IconButton>,
+          </IconButton>
         ]}
       />
     </React.Fragment>

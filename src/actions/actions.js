@@ -1,4 +1,5 @@
 const client = require('../api/apiClient');
+const userAuth = require('../api/userAuthentication');
 
 export function loadPersonList(name) {
   return dispatch => {
@@ -8,8 +9,8 @@ export function loadPersonList(name) {
         dispatch(updatePersonListAction(res.data));
       })
       .catch(error => {
-          // TODO: error status
-        console.error('erro logado', error);
+        // TODO: error status
+        console.error('logged error', error);
       });
   };
 }
