@@ -105,7 +105,7 @@ function PrimarySearchAppBar(props) {
   }
 
   function signOut() {
-    sessionStorage.removeItem("userData");
+    localStorage.removeItem("userData");
     window.location.href = "login";
   }
 

@@ -115,13 +115,13 @@ export default () => {
         autoHideDuration={6000}
         onClose={closeSuccessBar}
         ContentProps={{
-          "aria-describedby": "message-id",
+          "aria-describedby": "successMessage",
           classes: {
             root: classes.success
           }
         }}
         message={
-          <span id="message-id">{getForm.name} adicionado com sucesso!</span>
+          <span id="successMessage">{getForm.name} adicionado com sucesso!</span>
         }
         action={[
           <Button

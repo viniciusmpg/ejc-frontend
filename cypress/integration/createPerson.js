@@ -10,10 +10,18 @@ describe("Person List", function() {
         cy.get("[name=dob]").type(person.dob);
         cy.get("[name=email]").type(person.email);
 
-        cy.get("#personForm").submit();
-      });
+        cy.get("#personForm button")
+          .click()
+          .should(() => {
+            expect("#successMessage").to.exist;
+          });
 
-      
+        cy.localVisit(config, "");
+
+        cy.get(".MuiListItem-container span")
+          .contains(person.name)
+          .should("be.visible");
+      });
     });
   });
 });

@@ -91,7 +91,7 @@ const SignInSide = props => {
           <Typography component="h1" variant="h5">
             Acesso restrito
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+          <form id="loginForm" className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
