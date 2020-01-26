@@ -71,8 +71,7 @@ const SignInSide = props => {
 
     try {
       const userData = await userAuth.signIn(getForm);
-      window.location.href = 'adicionar';
-      //history.push(null, "adicionar");
+      window.location.href = '/';
     } catch (err) {
       alert(err);
     }

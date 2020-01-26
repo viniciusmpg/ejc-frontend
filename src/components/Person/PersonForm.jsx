@@ -52,7 +52,7 @@ export default () => {
 
   return (
     <React.Fragment>
-      <form onSubmit={handleSubmit}>
+      <form id="personForm" onSubmit={handleSubmit}>
         <PersonPicture facebookId={getForm.facebookId}></PersonPicture>
         <TextField
           autoFocus
