@@ -8,6 +8,8 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
 import PersonPicture from "./PersonPicture";
+import Grid from "@material-ui/core/Grid";
+import EventsTable from './EventsTable';
 
 const client = require("../../api/apiClient");
 
@@ -25,6 +27,13 @@ export default () => {
   const classes = useStyles();
   const [getForm, setForm] = React.useState({});
 
+  const initialState = {
+    name: "",
+    dob: "",
+    facebookId: "",
+    email: ""
+  };
+
   function changeHandler(event) {
     const { name, value } = event.target;
     setForm({ ...getForm, [name]: value });
@@ -38,11 +47,17 @@ export default () => {
     setForm({ ...getForm, openDialog: false });
   }
 
+  const eventsChangedHandler =  (newData) => {
+    debugger;
+    setForm({ ...getForm, eventParticipations: newData });
+  };
+
   function handleSubmit(event) {
     event.preventDefault();
     client
       .post("persons", getForm)
       .then(res => {
+        setForm({ ...initialState });
         openSuccessBar();
       })
       .catch(res => {
@@ -51,7 +66,13 @@ export default () => {
   }
 
   return (
-    <React.Fragment>
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+    >
       <form id="personForm" onSubmit={handleSubmit}>
         <PersonPicture facebookId={getForm.facebookId}></PersonPicture>
         <TextField
@@ -103,7 +124,10 @@ export default () => {
           }}
           onChange={changeHandler}
         />
-        <Button type="submit">Salvar</Button>
+        <EventsTable events={getForm.eventParticipations} onEventsChanged={eventsChangedHandler}/>
+     <Button type="submit" variant="contained" color="primary">
+          Salvar
+        </Button>
       </form>
 
       <Snackbar
@@ -121,7 +145,9 @@ export default () => {
           }
         }}
         message={
-          <span id="successMessage">{getForm.name} adicionado com sucesso!</span>
+          <span id="successMessage">
+            {getForm.name} adicionado com sucesso!
+          </span>
         }
         action={[
           <Button
@@ -145,6 +171,6 @@ export default () => {
           </IconButton>
         ]}
       />
-    </React.Fragment>
+    </Grid>
   );
 };
