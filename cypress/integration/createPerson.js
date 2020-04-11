@@ -7,7 +7,7 @@ describe("Person List", function() {
 
       cy.fixture("mockCreatePerson").then(person => {
         cy.get("[name=name]").type(person.name);
-        cy.get("[name=dob]").type(person.dob);
+        cy.get("[name=dob]").type(person.dateOfBirth);
         cy.get("[name=email]").type(person.email);
 
         cy.get("#personForm button")

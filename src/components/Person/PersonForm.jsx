@@ -7,9 +7,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
-import PersonPicture from "./PersonPicture";
 import Grid from "@material-ui/core/Grid";
-import EventsTable from './EventsTable';
+import EventsTable from './EventParticipationsTable';
 
 const client = require("../../api/apiClient");
 
@@ -28,10 +27,9 @@ export default () => {
   const [getForm, setForm] = React.useState({});
 
   const initialState = {
-    name: "",
-    dob: "",
-    facebookId: "",
-    email: ""
+    Name: "",
+    DateOfBirth: "",
+    Email: ""
   };
 
   function changeHandler(event) {
@@ -50,10 +48,13 @@ export default () => {
   const eventsChangedHandler =  (newData) => {
     debugger;
     setForm({ ...getForm, eventParticipations: newData });
+
+    console.log('new state', getForm);
   };
 
   function handleSubmit(event) {
     event.preventDefault();
+    debugger;
     client
       .post("persons", getForm)
       .then(res => {
@@ -74,7 +75,6 @@ export default () => {
       justify="center"
     >
       <form id="personForm" onSubmit={handleSubmit}>
-        <PersonPicture facebookId={getForm.facebookId}></PersonPicture>
         <TextField
           autoFocus
           margin="dense"
@@ -90,7 +90,7 @@ export default () => {
         />
         <TextField
           margin="dense"
-          name="dob"
+          name="dateOfBirth"
           label="Data de Nascimento"
           type="date"
           fullWidth
@@ -112,19 +112,8 @@ export default () => {
           }}
           onChange={changeHandler}
         />
-        <TextField
-          margin="dense"
-          name="facebookId"
-          label="Facebook"
-          type="text"
-          value={getForm.facebookId}
-          fullWidth
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={changeHandler}
-        />
-        <EventsTable events={getForm.eventParticipations} onEventsChanged={eventsChangedHandler}/>
+        <EventsTable events={getForm.eventParticipations} onRowUpdated={eventsChangedHandler}></EventsTable>
+        
      <Button type="submit" variant="contained" color="primary">
           Salvar
         </Button>

@@ -14,7 +14,7 @@ class PersonList extends React.Component {
       <List>
         {this.props.persons &&
           this.props.persons.map(person => (
-            <PersonItem key={person._id} person={person}></PersonItem>
+            <PersonItem key={person.id} person={person}></PersonItem>
           ))}
       </List>
     );
