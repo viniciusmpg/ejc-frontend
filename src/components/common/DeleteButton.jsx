@@ -34,7 +34,7 @@ function DeleteButton(props) {
   function confirmDelete() {
     client
       .delete(`persons/${props.personId}`)
-      .then(function(response) {
+      .then(function() {
         props.loadPersonList();
       })
       .catch(function(error) {

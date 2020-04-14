@@ -43,7 +43,7 @@ export default props => {
         <ListItemSecondaryAction>
           <EditButton
             className={classes.fab}
-            person={props.person}
+            personId={props.person.id}
           ></EditButton>
           <DeleteButton
             className={classes.fab}

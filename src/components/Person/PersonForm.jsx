@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
 import TextField from "@material-ui/core/TextField";
@@ -8,8 +8,12 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import EventsTable from './EventParticipationsTable';
-
+import EventsTable from "./EventsTable";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 const client = require("../../api/apiClient");
 
 const useStyles = makeStyles(theme => ({
@@ -22,15 +26,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default () => {
-  const classes = useStyles();
-  const [getForm, setForm] = React.useState({});
+const emptyState = {
+  name: "",
+  dateOfBirth: "",
+  email: ""
+};
 
-  const initialState = {
-    Name: "",
-    DateOfBirth: "",
-    Email: ""
-  };
+export default ({ initialState }) => {
+  const classes = useStyles();
+
+  const [getForm, setForm] = useState(initialState ? initialState : emptyState);
 
   function changeHandler(event) {
     const { name, value } = event.target;
@@ -45,20 +50,20 @@ export default () => {
     setForm({ ...getForm, openDialog: false });
   }
 
-  const eventsChangedHandler =  (newData) => {
-    debugger;
+  const eventsChangedHandler = newData => {
     setForm({ ...getForm, eventParticipations: newData });
+  };
 
-    console.log('new state', getForm);
+  const handleDateChange = date => {
+    setForm({ ...getForm, dateOfBirth: date });
   };
 
   function handleSubmit(event) {
     event.preventDefault();
-    debugger;
     client
       .post("persons", getForm)
       .then(res => {
-        setForm({ ...initialState });
+        setForm({ ...emptyState });
         openSuccessBar();
       })
       .catch(res => {
@@ -88,7 +93,21 @@ export default () => {
           onChange={changeHandler}
           value={getForm.name}
         />
-        <TextField
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            margin="dense"
+            name="dateOfBirth"
+            label="Data de Nascimento"
+            format="dd/MM/yyyy"
+            value={getForm.dateOfBirth}
+            onChange={handleDateChange}
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+        </MuiPickersUtilsProvider>
+
+        {/* <TextField
           margin="dense"
           name="dateOfBirth"
           label="Data de Nascimento"
@@ -98,8 +117,8 @@ export default () => {
             shrink: true
           }}
           onChange={changeHandler}
-          value={getForm.dob}
-        />
+          value={getForm.dateOfBirth}
+        /> */}
         <TextField
           margin="dense"
           name="email"
@@ -112,9 +131,12 @@ export default () => {
           }}
           onChange={changeHandler}
         />
-        <EventsTable events={getForm.eventParticipations} onRowUpdated={eventsChangedHandler}></EventsTable>
-        
-     <Button type="submit" variant="contained" color="primary">
+        <EventsTable
+          events={getForm.eventParticipations}
+          onRowUpdated={eventsChangedHandler}
+        ></EventsTable>
+
+        <Button type="submit" variant="contained" color="primary">
           Salvar
         </Button>
       </form>
