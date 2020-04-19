@@ -12,24 +12,50 @@ import EventsTable from "./EventsTable";
 import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker
+  KeyboardDatePicker,
 } from "@material-ui/pickers";
-const client = require("../../api/apiClient");
+import Paper from "@material-ui/core/Paper";
+import FormLabel from "@material-ui/core/FormLabel";
+import Avatar from "@material-ui/core/Avatar";
 
-const useStyles = makeStyles(theme => ({
+const client = require("../../api/apiClient");
+const moment = require("moment");
+const fileUtils = require("../../utils/fileUtils");
+
+const useStyles = makeStyles((theme) => ({
   close: {
-    padding: theme.spacing(0.5)
+    padding: theme.spacing(0.5),
   },
   success: {
     background: green[600],
-    color: "#FFF"
-  }
+    color: "#FFF",
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      marginTop: theme.spacing(6),
+      marginBottom: theme.spacing(6),
+      padding: theme.spacing(3),
+    },
+  },
+  layout: {
+    width: "auto",
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: 600,
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+  },
 }));
 
 const emptyState = {
   name: "",
-  dateOfBirth: "",
-  email: ""
+  dateOfBirth: null,
+  email: "",
 };
 
 export default ({ initialState }) => {
@@ -50,138 +76,161 @@ export default ({ initialState }) => {
     setForm({ ...getForm, openDialog: false });
   }
 
-  const eventsChangedHandler = newData => {
+  const eventsChangedHandler = (newData) => {
     setForm({ ...getForm, eventParticipations: newData });
   };
 
-  const handleDateChange = date => {
+  const handleDateChange = (date) => {
     setForm({ ...getForm, dateOfBirth: date });
   };
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    client
-      .post("persons", getForm)
-      .then(res => {
+  const handleSubmissionPromise = (savePromise) => {
+    savePromise
+      .then((res) => {
         setForm({ ...emptyState });
         openSuccessBar();
       })
-      .catch(res => {
+      .catch((res) => {
         console.log("error response", res);
       });
+  };
+
+  const handleFileChange = (event) => {
+    fileUtils.toBase64(event.target.files[0])
+          .then((res) => setForm({...getForm, photo: res}) );
+  };
+
+  function savePerson(event) {
+    event.preventDefault();
+    const personToSave = {
+      ...getForm,
+      dateOfBirth: moment
+        .utc(getForm.dateOfBirth, "MM/DD/YYYY")
+        .format("DD/MM/YYYY"),
+    };
+    setForm(personToSave);
+
+    const savePromise = getForm.id
+      ? client.put("persons/" + getForm.id, personToSave)
+      : client.post("persons", personToSave);
+    handleSubmissionPromise(savePromise);
   }
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justify="center"
-    >
-      <form id="personForm" onSubmit={handleSubmit}>
-        <TextField
-          autoFocus
-          margin="dense"
-          name="name"
-          label="Nome"
-          type="text"
-          fullWidth
-          InputLabelProps={{
-            shrink: true
-          }}
-          onChange={changeHandler}
-          value={getForm.name}
-        />
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            margin="dense"
-            name="dateOfBirth"
-            label="Data de Nascimento"
-            format="dd/MM/yyyy"
-            value={getForm.dateOfBirth}
-            onChange={handleDateChange}
-            InputLabelProps={{
-              shrink: true
-            }}
-          />
-        </MuiPickersUtilsProvider>
+    <main className={classes.layout}>
+      <Paper className={classes.paper}>
+        <Grid
+          container
+          spacing={3}
+          direction="row"
+          alignItems="center"
+          justify="center"
+        >
+          <Grid item md={6}>
+            <TextField
+              autoFocus
+              margin="dense"
+              name="name"
+              label="Nome"
+              type="text"
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={changeHandler}
+              value={getForm.name}
+            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                margin="dense"
+                name="dateOfBirth"
+                label="Data de Nascimento"
+                format="dd/MM/yyyy"
+                fullWidth
+                value={getForm.dateOfBirth}
+                onChange={handleDateChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </MuiPickersUtilsProvider>
+            <TextField
+              margin="dense"
+              name="email"
+              label="Endereço de e-mail"
+              type="email"
+              value={getForm.email}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onChange={changeHandler}
+            />
+          </Grid>
+          <Grid item md={6}>
+          <Avatar alt="Remy Sharp" src={getForm.photo} />
+            <FormLabel>Foto</FormLabel>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              accept="image/png, image/jpeg"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <EventsTable
+              events={getForm.eventParticipations}
+              onRowUpdated={eventsChangedHandler}
+            ></EventsTable>
+            <Button
+              type="button"
+              onClick={savePerson}
+              variant="contained"
+              color="primary"
+            >
+              Salvar
+            </Button>
+          </Grid>
+        </Grid>
 
-        {/* <TextField
-          margin="dense"
-          name="dateOfBirth"
-          label="Data de Nascimento"
-          type="date"
-          fullWidth
-          InputLabelProps={{
-            shrink: true
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
           }}
-          onChange={changeHandler}
-          value={getForm.dateOfBirth}
-        /> */}
-        <TextField
-          margin="dense"
-          name="email"
-          label="Endereço de e-mail"
-          type="email"
-          value={getForm.email}
-          fullWidth
-          InputLabelProps={{
-            shrink: true
+          open={getForm.openDialog}
+          autoHideDuration={6000}
+          onClose={closeSuccessBar}
+          ContentProps={{
+            "aria-describedby": "successMessage",
+            classes: {
+              root: classes.success,
+            },
           }}
-          onChange={changeHandler}
-        />
-        <EventsTable
-          events={getForm.eventParticipations}
-          onRowUpdated={eventsChangedHandler}
-        ></EventsTable>
-
-        <Button type="submit" variant="contained" color="primary">
-          Salvar
-        </Button>
-      </form>
-
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left"
-        }}
-        open={getForm.openDialog}
-        autoHideDuration={6000}
-        onClose={closeSuccessBar}
-        ContentProps={{
-          "aria-describedby": "successMessage",
-          classes: {
-            root: classes.success
+          message={
+            <span id="successMessage">{getForm.name} salvo com sucesso!</span>
           }
-        }}
-        message={
-          <span id="successMessage">
-            {getForm.name} adicionado com sucesso!
-          </span>
-        }
-        action={[
-          <Button
-            component={Link}
-            to="/"
-            key="undo"
-            color="primary"
-            size="small"
-            onClick={closeSuccessBar}
-          >
-            Voltar para lista
-          </Button>,
-          <IconButton
-            key="close"
-            aria-label="close"
-            color="inherit"
-            className={classes.close}
-            onClick={closeSuccessBar}
-          >
-            <CloseIcon />
-          </IconButton>
-        ]}
-      />
-    </Grid>
+          action={[
+            <Button
+              component={Link}
+              to="/"
+              key="undo"
+              color="primary"
+              size="small"
+              onClick={closeSuccessBar}
+            >
+              Voltar para lista
+            </Button>,
+            <IconButton
+              key="close"
+              aria-label="close"
+              color="inherit"
+              className={classes.close}
+              onClick={closeSuccessBar}
+            >
+              <CloseIcon />
+            </IconButton>,
+          ]}
+        />
+      </Paper>
+    </main>
   );
 };

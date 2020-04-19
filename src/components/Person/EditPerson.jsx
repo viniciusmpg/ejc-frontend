@@ -17,7 +17,7 @@ export default () => {
   }, []);
 
   if (person) {
-    person.dateOfBirth = moment.utc(person.dateOfBirth).format("DD/MM/YYYY");
+    person.dateOfBirth = moment.utc(person.dateOfBirth, "DD/MM/YYYY").format("MM/DD/YYYY");
     return <PersonForm initialState={person} />;
   }
 

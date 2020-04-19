@@ -14,6 +14,4 @@ axiosInstance.interceptors.request.use(function (config) {
     return config;
 });
 
-console.log(`API endpoint: ${endpoint}`);
-
 module.exports = axiosInstance;
